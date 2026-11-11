@@ -103,7 +103,7 @@
         <div class="bp-stub">
           <div class="bp-field"><small>Confirmation</small><strong style="font-size:1.6rem">${id}</strong></div>
           <div class="bp-field"><small>Passengers</small><strong>${c.pups.length} pup${c.pups.length > 1 ? "s" : ""} · ${dateStr}</strong></div>
-          <div class="mini-stamp ink">Status<b>Pending</b></div>
+          <div class="mini-stamp worn">Status<b>Pending</b></div>
           <div class="barcode" style="${barcode}" role="img" aria-label="Barcode for ${id}"></div>
         </div>
       </article>

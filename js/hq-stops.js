@@ -32,7 +32,7 @@ window.WRStops = (function () {
     const name = $("b-name").value.trim() || "Badge name", emoji = $("s-emoji").value.trim() || "🐾";
     const short = $("s-short").value.trim() || "New stop";
     $("b-preview").innerHTML = `<div class="medal" style="--c:${color}" aria-hidden="true">${WR.esc(emoji)}</div><h4>${WR.esc(name)}</h4><small>${WR.esc($("b-desc").value.trim() || "Badge description")}</small>`;
-    $("stamp-preview").innerHTML = `<div class="pstamp ink" style="--c:${color};--r:-6deg"><span class="top">Woof Riders</span><span class="em" aria-hidden="true">${WR.esc(emoji)}</span><span class="name">${WR.esc(short)}</span><span class="date">${stampDate(today())}</span></div>`;
+    $("stamp-preview").innerHTML = `<div class="pstamp worn" style="--c:${color};--r:-6deg"><span class="top">Woof Riders</span><span class="em" aria-hidden="true">${WR.esc(emoji)}</span><span class="name">${WR.esc(short)}</span><span class="date">${stampDate(today())}</span></div>`;
     if (marker) marker.setIcon(icon());
   }
   const icon = () => L.divIcon({ className: "", html: `<div class="stop-marker here">${WR.esc($("s-emoji").value.trim() || "📍")}</div>`, iconSize: [40, 40], iconAnchor: [20, 20] });

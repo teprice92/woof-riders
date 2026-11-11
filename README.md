@@ -55,6 +55,15 @@ Brand colors and fonts are tokens at the top of `css/styles.css`.
 5. **Payments.** Reservations are requests with no payment taken. Add Stripe Checkout or Square when ready.
 6. **Map tiles.** The map uses OpenStreetMap tiles, which are fine for light use. For heavier traffic, use a tile provider such as MapTiler or Stadia Maps.
 
+## Host on GitHub Pages
+
+1. On GitHub, open the repository → **Settings** → **Pages**.
+2. Under **Build and deployment**, set **Source** to *Deploy from a branch*.
+3. Choose the branch `claude/woof-riders-website-o9pijf` (or `main` once merged) and the **/ (root)** folder, then **Save**.
+4. After a minute or two the site is live at `https://<your-username>.github.io/woof-riders/`.
+
+GitHub Pages is free for public repositories. A private repository needs a paid GitHub plan for Pages. The `.nojekyll` file tells Pages to serve every file exactly as-is.
+
 ## Run locally
 
 ```bash

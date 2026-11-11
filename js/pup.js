@@ -16,9 +16,9 @@
     const w = document.getElementById("welcome"); w.hidden = false;
     w.className = "notice sea welcome-stamp";
     w.innerHTML = (flag === "welcome"
-      ? `<div class="pstamp ink thump" style="--c:var(--sea);--r:-8deg"><span class="top">Passport</span><span class="em">🐾</span><span class="name">Issued</span><span class="date">${stampDate(issued)}</span></div>
+      ? `<div class="pstamp worn thump" style="--c:var(--sea);--r:-8deg"><span class="top">Passport</span><span class="em">🐾</span><span class="name">Issued</span><span class="date">${stampDate(issued)}</span></div>
          <div class="stack" style="gap:6px; flex:1 1 260px"><strong style="font-size:1.2rem">Welcome aboard, ${WR.esc(d.name)}!</strong><p>Pup Passport ${passNo} is issued and the waiver is on file. Next up: <a href="book.html#${d.id}">book a first ride</a> to earn the First Ride badge and your first stamp.</p></div>`
-      : `<div class="pstamp ink thump rect" style="--c:var(--good);--r:6deg"><span class="top">Waiver</span><span class="em">✓</span><span class="name">Approved</span><span class="date">${stampDate(new Date().toISOString().slice(0, 10))}</span></div>
+      : `<div class="pstamp worn thump rect" style="--c:var(--good);--r:6deg"><span class="top">Waiver</span><span class="em">✓</span><span class="name">Approved</span><span class="date">${stampDate(new Date().toISOString().slice(0, 10))}</span></div>
          <div class="stack" style="gap:6px; flex:1 1 260px"><strong style="font-size:1.2rem">Waiver signed.</strong><p>${WR.esc(d.name)} is cleared for field trips. <a href="book.html#${d.id}">Book a ride</a>.</p></div>`);
     history.replaceState(null, "", "#" + d.id);
   }
@@ -52,7 +52,7 @@
   document.getElementById("stamp-head").textContent = `${visitedLocs.length} of ${visitedLocs.length + notYet.length} stamps collected`;
   document.getElementById("stamps").innerHTML = visitedLocs.map((l) => {
     const h = WR.hash(d.id + l.id), b = S.badges.find((x) => x.location === l.id);
-    return `<div class="pstamp ink ${shapes[h % 3]}" style="--c:${b ? b.color : "var(--sunset)"};--r:${(h % 17) - 8}deg" title="${WR.esc(l.name)}"><span class="top">Woof Riders</span><span class="em" aria-hidden="true">${l.emoji}</span><span class="name">${WR.esc(l.short)}</span><span class="date">${stampDate(firstVisit[l.id])}</span></div>`;
+    return `<div class="pstamp worn ${shapes[h % 3]}" style="--c:${b ? b.color : "var(--sunset)"};--r:${(h % 17) - 8}deg" title="${WR.esc(l.name)}"><span class="top">Woof Riders</span><span class="em" aria-hidden="true">${l.emoji}</span><span class="name">${WR.esc(l.short)}</span><span class="date">${stampDate(firstVisit[l.id])}</span></div>`;
   }).join("") + notYet.map((l) => `<div class="pstamp empty"><span class="top">Not yet</span><span class="em" aria-hidden="true">${l.emoji}</span><span class="name">${WR.esc(l.short)}</span></div>`).join("");
 
   // ---------- badges ----------
@@ -76,7 +76,7 @@
     const vals = Object.values(grades || {}).map(WR.gradePaws); if (!vals.length) return "";
     const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
     const [label, c] = avg >= 4.6 ? ["Top Dog", "var(--good)"] : avg >= 3.8 ? ["Good Pup", "var(--sea)"] : ["Getting There", "var(--sunset)"];
-    return `<div class="mini-stamp ink" style="--c:${c}">Verdict<b>${label}</b></div>`;
+    return `<div class="mini-stamp worn" style="--c:${c}">Verdict<b>${label}</b></div>`;
   }
   function renderReport() {
     const box = document.getElementById("report");
