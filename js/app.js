@@ -215,15 +215,16 @@
   function header() {
     const here = location.pathname.split("/").pop() || "index.html";
     const links = NAV.map(([href, label, cls]) => `<a href="${href}" class="${cls || ""}" ${href === here ? 'aria-current="page"' : ""}>${label}</a>`).join("");
-    return `<nav class="site-nav" aria-label="Main"><div class="wrap">
-      <a class="brand" href="index.html"><img src="assets/logo-sm.png" alt="" width="52" height="41"><span>Woof Riders</span></a>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    return `<nav class="site-nav" aria-label="Main"><div class="nav-pill">
+      <a class="brand" href="index.html"><img src="assets/logo-sm.png" alt="" width="46" height="36"><span>Woof Riders</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></button>
       <div class="nav-links" id="nav-links">${links}<a class="btn small" href="book.html">Book a Ride</a></div>
     </div></nav>`;
   }
   function footer() {
     const b = state.business;
-    return `<footer class="site-footer"><div class="wrap">
+    return `<footer class="site-footer"><svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V30c120-26 240-26 360 0s240 26 360 0 240-26 360 0 240 26 360 0v30z" fill="currentColor"/></svg><div class="wrap">
+      <p class="footer-big">Let's roll, <span>pup.</span></p>
       <div class="footer-grid">
         <div class="footer-brand"><img src="assets/logo-sm.png" alt="Woof Riders logo" width="120" height="95"><p class="muted">Field trip doggy day care. We pick up your pup, hit the best dog-friendly spots in the ${esc(b.city)} area, and bring home one tired, happy dog.</p></div>
         <div><h4>Ride along</h4><ul><li><a href="book.html">Book a ride</a></li><li><a href="tracker.html">Live tracker</a></li><li><a href="index.html#pricing">Pricing &amp; passes</a></li><li><a href="index.html#faq">FAQ</a></li></ul></div>

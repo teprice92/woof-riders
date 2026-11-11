@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Yellowtail&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Shrikhand&display=swap">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -17,33 +17,44 @@
 
 <main>
   <section class="hero">
+    <div class="retro-sun" aria-hidden="true"></div>
+    <svg class="van-stripes" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 120 C 360 40, 720 200, 1080 90 S 1440 60, 1440 60 V200 H0z" fill="#ffc548"/>
+      <path d="M0 145 C 360 65, 720 225, 1080 115 S 1440 85, 1440 85 V200 H0z" fill="#f2602f"/>
+      <path d="M0 170 C 360 90, 720 250, 1080 140 S 1440 110, 1440 110 V200 H0z" fill="#0f9c96"/>
+      <path d="M0 195 C 360 115, 720 275, 1080 165 S 1440 135, 1440 135 V200 H0z" fill="var(--bg)"/>
+    </svg>
     <div class="wrap hero-grid">
       <div>
-        <p class="eyebrow">Field trip doggy day care</p>
-        <h1 style="margin-top:14px">Day care that<br>goes places.<span class="script">Let's roll, pup!</span></h1>
-        <p class="lede">We pick up your pup in the Woof Bus, explore the best dog-friendly parks, lakes and patios around town, and bring home one tired, happy dog with a report card and merit badges to prove it.</p>
+        <span class="hero-kicker"><b>New</b> Field trip doggy day care</span>
+        <h1 class="mega">Day care<br>that goes<br><span class="pop">places.</span></h1>
+        <p class="lede">We pick up your pup in the Woof Bus, hit the best dog-friendly trails, lakes and patios around town, and bring home one tired, happy dog. With a report card and merit badges to prove it.</p>
         <div class="row">
           <a class="btn" href="book.html">Book a Ride</a>
-          <a class="btn ghost" href="tracker.html">Watch today's trip live</a>
+          <a class="btn ghost" href="tracker.html" style="background:var(--surface)">Watch today's trip live</a>
         </div>
         <div class="trust-row">
           <div><strong class="num">10</strong>adventure stops</div>
           <div><strong class="num">12</strong>pups max per bus</div>
-          <div><strong class="num">1:4</strong>staff-to-pup ratio</div>
+          <div><strong class="num">1:4</strong>crew to pups</div>
           <div><strong>Pet CPR</strong>certified crew</div>
         </div>
       </div>
       <div class="hero-art">
-        <div class="sun-disc"></div>
-        <img src="assets/logo.webp" alt="Woof Riders logo: a corgi in sunglasses, a husky, a golden retriever and a dalmatian riding in a surf van past palm trees and desert mesas" width="1100" height="869">
+        <img class="sticker" src="assets/logo.webp" alt="Woof Riders logo: a corgi in sunglasses, a husky, a golden retriever and a dalmatian riding in a surf van past palm trees and desert mesas" width="1100" height="869">
+        <div class="float-patch p1" aria-hidden="true"><div class="medal" style="--c:#2f9e5b">🌵</div></div>
+        <div class="float-patch p2" aria-hidden="true"><div class="medal" style="--c:#1a9fd6">🌊</div></div>
+        <div class="float-patch p3" aria-hidden="true"><div class="medal" style="--c:#f2602f">🚌</div></div>
       </div>
     </div>
   </section>
 
-  <section class="wrap" aria-label="Today's trip">
+  <div class="marquee" aria-label="Field trip stops"><div class="marquee-track" id="marquee"></div></div>
+
+  <section class="wrap" aria-label="Today's trip" style="padding-top:56px">
     <div class="live-strip" id="live-strip">
       <div class="row"><span class="pill live">Live now</span><p id="live-text">Today's field trip is rolling.</p></div>
-      <a class="btn small" href="tracker.html">Open the tracker</a>
+      <a class="btn small sea" href="tracker.html">Open the tracker</a>
     </div>
   </section>
 
@@ -51,109 +62,88 @@
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Why pups pick us</p>
-        <h2>Every day is a new adventure.<br><span class="muted">Every adventure gets a badge.</span></h2>
+        <h2>Every day is a new adventure.<br><span style="color:var(--sunset)">Every adventure earns a badge.</span></h2>
       </div>
-      <div class="grid g4">
-        <article class="tile feature">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
-          <h3>Live Bus Tracker</h3>
-          <p>Follow the Woof Bus on a map in real time. Each stop lights up with Instagram Pupdates as the pack explores, so you can see exactly where your dog is and what they're sniffing.</p>
-          <a class="link-arrow" style="color:#fff" href="tracker.html">See today's route</a>
-        </article>
-        <article class="tile sun">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14 7 22l5-3 5 3-1.5-8"/></svg></div>
-          <h3>Merit Badges</h3>
-          <p>Every new place earns a collectible badge. Desert Dog, Splash Pawty, Trailblazer and more.</p>
-        </article>
-        <article class="tile sunset">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
-          <h3>Pupdate Report Cards</h3>
-          <p>Grades for Bus Manners, Recall, Nap Quality and more, plus a photo from every stop.</p>
-        </article>
-        <article class="tile">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></div>
-          <h3>Pupparazzi on Instagram</h3>
-          <p>Our crew posts from the road all day. Tag along at @woofriders.</p>
-        </article>
-        <article class="tile">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <h3>Safety on every seat</h3>
-          <p>Crash-tested harness clips, AC that never quits, and a pet first-aid kit on board.</p>
-        </article>
-        <article class="tile sun">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
-          <h3>Heat-smart routes</h3>
-          <p>Summer trips start early, favor water and shade, and we check pavement temps before every walk.</p>
-        </article>
-        <article class="tile sunset">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></div>
-          <h3>Door-to-door pickup</h3>
-          <p>Add home pickup and the bus comes to you. Your pup's ride starts at your front door.</p>
-        </article>
+      <div class="bento">
+        <a class="tile feature" href="tracker.html" style="text-decoration:none">
+          <svg class="mini-map" viewBox="0 0 660 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="route" id="mm-route" d="M60 200 C 160 90, 250 230, 360 120 S 520 60, 600 150"/>
+            <g font-size="30" text-anchor="middle"><text x="60" y="212">🏠</text><text x="250" y="170">🌵</text><text x="420" y="98">🌊</text><text x="600" y="164">🦋</text></g>
+            <g><text font-size="44" text-anchor="middle" dy="14">🚌</text><animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#mm-route"/></animateMotion></g>
+          </svg>
+          <span class="tag">Live</span>
+          <h3>Follow the bus.</h3>
+          <p>Watch the Woof Bus on a live map. Each stop lights up with Instagram Pupdates as the pack explores, so you always know what your dog is sniffing.</p>
+        </a>
+        <article class="tile sun"><span class="art" aria-hidden="true">🏅</span><span class="tag">Collect</span><h3>Merit badges</h3><p>Every new place earns a stitched badge for your pup's sash.</p></article>
+        <article class="tile sunset"><span class="art" aria-hidden="true">📝</span><span class="tag">Grades</span><h3>Report cards</h3><p>Bus Manners, Recall, Nap Quality and more, plus a photo from every stop.</p></article>
+        <article class="tile ink"><span class="art" aria-hidden="true">📸</span><span class="tag">@woofriders</span><h3>Pupparazzi</h3><p>Our crew posts from the road all day long.</p></article>
+        <article class="tile sea"><span class="art" aria-hidden="true">🛡️</span><span class="tag">Safety</span><h3>Buckled up</h3><p>Harness clip-ins, cold AC and a pet first-aid kit on board.</p></article>
+        <article class="tile sun wide"><span class="art" aria-hidden="true">🌡️</span><span class="tag">Arizona-smart</span><h3>Heat-smart routes</h3><p>Summer trips start early, favor water and shade, and we check pavement temps before every walk.</p></article>
+        <article class="tile sunset wide"><span class="art" aria-hidden="true">🏡</span><span class="tag">Add-on</span><h3>Door-to-door pickup</h3><p>The bus comes to you. Your pup's ride starts at your front door.</p></article>
       </div>
     </div>
   </section>
 
-  <section class="band alt">
-    <div class="wrap">
+  <section class="road-band">
+    <svg class="wave-top" viewBox="0 0 1440 50" preserveAspectRatio="none" aria-hidden="true" style="color:var(--bg);background:var(--road)"><path d="M0 0h1440v20c-120 24-240 24-360 0s-240-24-360 0-240 24-360 0S120-4 0 20z" fill="currentColor"/></svg>
+    <div class="wrap band" style="padding-top:clamp(48px,7vw,96px)">
       <div class="section-head">
         <p class="eyebrow">A day on the Woof Bus</p>
         <h2>From zoomies to snoozies.</h2>
         <p class="lede">A typical field trip. Routes rotate daily so every ride is a little different.</p>
       </div>
       <div class="day-line">
-        <div class="day-stop"><time>8:30 AM</time><h3>All aboard</h3><p>Pickup at the clubhouse or your door. Tail-wag check and harness clip-in.</p></div>
-        <div class="day-stop"><time>9:30 AM</time><h3>First sniff stop</h3><p>Desert trails or a city stroll while it's still cool out.</p></div>
-        <div class="day-stop"><time>11:00 AM</time><h3>Splash &amp; lunch</h3><p>Water play, shade time and lunch from your pup's own bag.</p></div>
-        <div class="day-stop"><time>12:45 PM</time><h3>Pack play</h3><p>Dog-park meetups or patio manners practice. Badges get earned here.</p></div>
-        <div class="day-stop"><time>4:00 PM</time><h3>Home, sleepy</h3><p>Back to the clubhouse with a full report card in your inbox.</p></div>
+        <div class="day-stop"><time>8:30</time><span class="emoji" aria-hidden="true">🚌</span><h3>All aboard</h3><p>Pickup at the clubhouse or your door. Tail-wag check and harness clip-in.</p></div>
+        <div class="day-stop"><time>9:30</time><span class="emoji" aria-hidden="true">🌵</span><h3>First sniff stop</h3><p>Desert trails or a city stroll while it's still cool out.</p></div>
+        <div class="day-stop"><time>11:00</time><span class="emoji" aria-hidden="true">🌊</span><h3>Splash &amp; lunch</h3><p>Water play, shade time and lunch from your pup's own bag.</p></div>
+        <div class="day-stop"><time>12:45</time><span class="emoji" aria-hidden="true">🦋</span><h3>Pack play</h3><p>Dog-park meetups or patio manners practice. Badges get earned here.</p></div>
+        <div class="day-stop"><time>4:00</time><span class="emoji" aria-hidden="true">😴</span><h3>Home, sleepy</h3><p>Back to the clubhouse with a full report card in your inbox.</p></div>
       </div>
     </div>
+    <svg class="wave-top" viewBox="0 0 1440 50" preserveAspectRatio="none" aria-hidden="true" style="color:var(--bg);background:var(--road);transform:scaleY(-1)"><path d="M0 0h1440v20c-120 24-240 24-360 0s-240-24-360 0-240 24-360 0S120-4 0 20z" fill="currentColor"/></svg>
   </section>
 
-  <section class="band">
+  <section class="band" style="overflow:hidden">
     <div class="wrap">
-      <div class="row between" style="align-items:end; margin-bottom:40px">
+      <div class="row between" style="align-items:end; margin-bottom:56px">
         <div class="section-head" style="margin-bottom:0">
           <p class="eyebrow">Merit badges</p>
           <h2>Collect them all.</h2>
-          <p class="lede">Each stop on the map has its own badge. Pups earn it the first time they visit, and it lands in their Pup Passport for you to brag about.</p>
+          <p class="lede">Each stop has its own stitched badge. Pups earn it on their first visit, and it goes straight onto their Pup Passport sash.</p>
         </div>
-        <a class="link-arrow" href="badges.html">See the full badge book</a>
+        <a class="btn ghost" href="badges.html">See the badge book</a>
       </div>
-      <div class="badge-grid" id="home-badges"></div>
     </div>
+    <div class="sash" aria-label="Merit badges"><div class="sash-track" id="home-badges"></div></div>
   </section>
 
   <section class="band alt" id="pricing">
     <div class="wrap">
       <div class="section-head center">
         <p class="eyebrow">Pricing</p>
-        <h2>Pick your pup pass.</h2>
-        <p class="lede">Every ride includes the field trip, lunch break, water, a report card and stop photos.</p>
+        <h2>Grab your ticket.</h2>
+        <p class="lede">Every ride includes the field trip, a lunch break, water, a report card and stop photos.</p>
       </div>
-      <div class="grid g3">
-        <div class="card price-card">
-          <h3>Single Ride</h3>
-          <p class="price num">$65<small> / day</small></p>
-          <ul><li>Full-day field trip</li><li>Report card &amp; stop photos</li><li>Merit badges</li></ul>
-          <a class="btn ghost" href="book.html">Book a ride</a>
+      <div class="tickets">
+        <div class="ticket">
+          <div class="ticket-top"><span class="admit">Admit one pup</span><h3>Single Ride</h3><p class="price num">$65<small> / day</small></p></div>
+          <div class="perf" aria-hidden="true"></div>
+          <div class="ticket-body"><ul><li>Full-day field trip</li><li>Report card &amp; stop photos</li><li>Merit badges</li></ul><a class="btn ghost" href="book.html">Book a ride</a></div>
         </div>
-        <div class="card price-card best">
-          <span class="pill">Most popular</span>
-          <h3>10-Ride Pup Pass</h3>
-          <p class="price num">$590<small> / 10 rides</small></p>
-          <ul><li>Save $60 vs. single rides</li><li>Priority seats on Sedona road trips</li><li>Free Pupparazzi photo pack every 5th ride</li></ul>
-          <a class="btn" href="book.html">Start riding</a>
+        <div class="ticket best">
+          <span class="stamp">Most popular</span>
+          <div class="ticket-top"><span class="admit">Admit one pup × 10</span><h3>10-Ride Pup Pass</h3><p class="price num">$590<small> / 10 rides</small></p></div>
+          <div class="perf" aria-hidden="true"></div>
+          <div class="ticket-body"><ul><li>Save $60 vs. single rides</li><li>Priority seats on Sedona road trips</li><li>Free Pupparazzi photo pack every 5th ride</li></ul><a class="btn" href="book.html">Start riding</a></div>
         </div>
-        <div class="card price-card">
-          <h3>Top Dog Club</h3>
-          <p class="price num">$899<small> / month</small></p>
-          <ul><li>Unlimited weekday rides</li><li>Free door-to-door pickup</li><li>Monthly Pupicure bath</li></ul>
-          <a class="btn ghost" href="book.html">Join the club</a>
+        <div class="ticket">
+          <div class="ticket-top"><span class="admit">All-access</span><h3>Top Dog Club</h3><p class="price num">$899<small> / month</small></p></div>
+          <div class="perf" aria-hidden="true"></div>
+          <div class="ticket-body"><ul><li>Unlimited weekday rides</li><li>Free door-to-door pickup</li><li>Monthly Pupicure bath</li></ul><a class="btn ghost" href="book.html">Join the club</a></div>
         </div>
       </div>
-      <p class="muted" style="text-align:center; margin-top:24px">Sedona road trips are $95. Add-ons: home pickup $12, Pupicure bath $25, photo pack $20, Barkday Bash $30.</p>
+      <p class="muted" style="text-align:center; margin-top:32px">Sedona road trips are $95. Add-ons: home pickup $12, Pupicure bath $25, photo pack $20, Barkday Bash $30.</p>
     </div>
   </section>
 
@@ -172,7 +162,7 @@
     </div>
   </section>
 
-  <section class="band tight">
+  <section class="band tight" style="padding-bottom:clamp(96px,10vw,140px)">
     <div class="wrap">
       <div class="cta-band">
         <div>
@@ -206,7 +196,11 @@
   } else {
     document.getElementById("live-strip").hidden = true;
   }
-  document.getElementById("home-badges").innerHTML = WR.state.badges.filter((b) => b.kind === "place").slice(0, 6).map((b) => WR.medal(b)).join("");
+  // Sash and ticker loop seamlessly, so their contents are doubled.
+  const patches = WR.state.badges.map((b) => `<div class="badge"><div class="medal" style="--c:${b.color}" aria-hidden="true">${b.emoji}</div><h4>${WR.esc(b.name)}</h4></div>`).join("");
+  document.getElementById("home-badges").innerHTML = patches + patches.replace(/class="badge"/g, 'class="badge" aria-hidden="true"');
+  const stops = WR.state.locations.map((l) => `<span>${WR.esc(l.short)}</span>`).join("");
+  document.getElementById("marquee").innerHTML = stops + stops;
 })();
 </script>
 </body>
