@@ -22,6 +22,8 @@
       document.querySelectorAll("[data-panel]").forEach((p) => (p.hidden = p.dataset.panel !== b.dataset.tab));
     });
 
+    if (window.WRStops) WRStops.init(() => kpis && kpis());
+
     // ---------- KPIs ----------
     function kpis() {
       const pending = S.reservations.filter((r) => r.status === "pending").length;

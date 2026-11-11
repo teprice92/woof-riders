@@ -39,6 +39,12 @@
       </div>
     </div>
   </section>
+  <section class="band tight" id="special-section" hidden>
+    <div class="wrap stack-lg">
+      <div class="stack" style="gap:6px"><h2 style="font-size:var(--step-2)">Special event badges</h2><p class="muted">Limited editions for holidays and one-off adventures. Awarded by the crew.</p></div>
+      <div class="badge-grid" id="b-special"></div>
+    </div>
+  </section>
   <section class="band tight">
     <div class="wrap">
       <div class="cta-band"><div><h2>Start the collection.</h2><p>Your pup's first ride earns the First Ride badge plus a badge for every stop on the route.</p></div><div class="row"><a class="btn" href="book.html">Book a Ride</a><a class="btn ghost" href="pack.html">See the pack</a></div></div>
@@ -52,8 +58,9 @@
 (function () {
   const S = WR.state;
   const counts = {}; S.dogs.forEach((d) => WR.earnedBadges(d.id).forEach((_, id) => (counts[id] = (counts[id] || 0) + 1)));
-  ["place", "milestone", "grade"].forEach((k) => {
-    document.getElementById("b-" + k).innerHTML = S.badges.filter((b) => b.kind === k).map((b) => {
+  document.getElementById("special-section").hidden = !S.badges.some((b) => b.kind === "special");
+  ["place", "milestone", "grade", "special"].forEach((k) => {
+    document.getElementById("b-" + k).innerHTML = S.badges.filter((b) => b.kind === k && !(b.location && WR.loc(b.location)?.retired)).map((b) => {
       const where = b.location ? WR.loc(b.location).name : "";
       return `<div class="badge"><div class="medal" style="--c:${b.color}" aria-hidden="true">${b.emoji}</div><h4>${WR.esc(b.name)}</h4><small>${WR.esc(b.desc)}</small>${where ? `<small><strong>${WR.esc(where)}</strong></small>` : ""}<span class="pill num">${counts[b.id] || 0} pup${counts[b.id] === 1 ? "" : "s"} earned</span></div>`;
     }).join("");

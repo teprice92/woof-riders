@@ -48,8 +48,8 @@
   trips.slice().reverse().forEach((t) => WR.visitedStops(t, d.id).forEach((l) => { if (!firstVisit[l]) firstVisit[l] = t.date; }));
   const shapes = ["", "rect", "oval"];
   const visitedLocs = S.locations.filter((l) => firstVisit[l.id]).sort((a, b) => firstVisit[a.id].localeCompare(firstVisit[b.id]));
-  const notYet = S.locations.filter((l) => !firstVisit[l.id]);
-  document.getElementById("stamp-head").textContent = `${visitedLocs.length} of ${S.locations.length} stamps collected`;
+  const notYet = S.locations.filter((l) => !firstVisit[l.id] && !l.retired);
+  document.getElementById("stamp-head").textContent = `${visitedLocs.length} of ${visitedLocs.length + notYet.length} stamps collected`;
   document.getElementById("stamps").innerHTML = visitedLocs.map((l) => {
     const h = WR.hash(d.id + l.id), b = S.badges.find((x) => x.location === l.id);
     return `<div class="pstamp ink ${shapes[h % 3]}" style="--c:${b ? b.color : "var(--sunset)"};--r:${(h % 17) - 8}deg" title="${WR.esc(l.name)}"><span class="top">Woof Riders</span><span class="em" aria-hidden="true">${l.emoji}</span><span class="name">${WR.esc(l.short)}</span><span class="date">${stampDate(firstVisit[l.id])}</span></div>`;

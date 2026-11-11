@@ -392,7 +392,7 @@ legend { font-family: var(--font-display); font-weight: 800; font-size: var(--st
 .field { display: grid; gap: 6px; min-width: 0; }
 .field label, .label { font-weight: 700; font-size: .92rem; }
 .field .hint { font-size: .85rem; color: var(--muted); }
-input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], input[type="url"], input[type="password"], select, textarea {
+input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], input[type="time"], input[type="url"], input[type="password"], select, textarea {
   font: inherit; font-size: 1rem; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; width: 100%; min-width: 0;
 }
 textarea { min-height: 96px; resize: vertical; }

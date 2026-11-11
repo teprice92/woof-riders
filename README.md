@@ -15,7 +15,7 @@ It's a static site (plain HTML, CSS and JavaScript, no build step), so it can be
 | `pack.html` | All pups, search, and the "Top Dogs" badge leaderboard |
 | `badges.html` | The Badge Book: adventure, milestone and honor-roll badges |
 | `book.html` | **Reservations**: choose a trip (seats left), pups (checks waiver and vaccines), pickup, add-ons; live price summary |
-| `hq.html` | **Pack Leader HQ** for staff (demo PIN `WOOF`): move the bus or share phone GPS, post Pupdates (Instagram link or photo), roster check-in, grade report cards, upload stop photos, award bonus badges, manage reservations, see waiver and vaccine status |
+| `hq.html` | **Pack Leader HQ** for staff (demo PIN `WOOF`): move the bus or share phone GPS, post Pupdates (Instagram link or photo), roster check-in, grade report cards, upload stop photos, award bonus badges, **add and edit stops with their merit badges, create special event badges, schedule trips**, manage reservations, see waiver and vaccine status |
 
 ## How badges work
 
@@ -24,11 +24,22 @@ It's a static site (plain HTML, CSS and JavaScript, no build step), so it can be
 - **Honor roll**: A+ in Bus Manners (Gold Star Passenger) or Plays Well With Paws (Pack Leader).
 - Staff can award any badge by hand from HQ.
 
+## Adding stops and badges (no code needed)
+
+In Pack Leader HQ:
+
+1. **Stops & badges → Add a stop.** Name it, describe it, and place it by searching an address, tapping the map or using your phone's location. Pick an emoji and scene.
+2. **Design the badge.** Type a name or tap 🎲 *Surprise me* for a dog-pun name, pick a color, and watch the patch and passport stamp preview update.
+3. **Trips → Schedule a field trip.** Tap stops in the order you'll visit them. Times are spaced automatically between departure and home time. The trip opens for booking and shows on the live tracker on the day.
+4. **Special event badges** (e.g. a Halloween ride) aren't tied to a stop. Award them from *Report cards & photos*.
+
+Retiring a stop hides it from new trips but keeps every badge and stamp pups already earned there.
+
 ## Customize
 
 Everything business-specific lives in `js/data.js`:
 
-- `locations`: stops with coordinates, emoji and badge (sample stops are in the Phoenix metro).
+- `locations`: the starting stops with coordinates, emoji and badge (sample stops are in the Phoenix metro). Stops added or edited in HQ are kept separately and aren't overwritten by this file.
 - `badges`, `subjects` (report card subjects), `pricing` and add-ons.
 - `business`: phone, email, Instagram handle.
 - `dogs`, `trips`, `posts` and `reservations` are **sample data** so the site looks alive. Remove them before launch.

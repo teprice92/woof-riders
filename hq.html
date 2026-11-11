@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Shrikhand&display=swap">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="css/styles.css">
 <style>
   .hq-panel { display: grid; gap: 24px; }
@@ -26,6 +27,19 @@
   .photo-grid .photo-drop .cap { position: absolute; left: 8px; bottom: 8px; z-index: 2; background: rgba(0,0,0,.55); color: #fff; padding: 3px 8px; border-radius: 999px; font-size: .78rem; font-weight: 700; }
   .grade-select { display: grid; grid-template-columns: minmax(0, 1fr) 110px; gap: 12px; align-items: center; padding-block: 8px; border-bottom: 1px solid var(--line); }
   #gate { max-width: 440px; margin: 0 auto; text-align: center; }
+  .stop-builder { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  @media (max-width: 900px) { .stop-builder { grid-template-columns: minmax(0, 1fr); } }
+  .pick-map { height: 280px; border-radius: 16px; border: 1px solid var(--line); overflow: hidden; }
+  .emoji-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+  .emoji-pick button { font-size: 1.35rem; width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); cursor: pointer; }
+  .emoji-pick button[aria-pressed="true"] { border-color: var(--sea); background: var(--sea-soft); }
+  .swatches { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .swatches button { width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 1.5px var(--line); cursor: pointer; }
+  .swatches button[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--ink); }
+  .swatches input[type="color"] { width: 38px; height: 38px; border: 0; padding: 0; background: none; cursor: pointer; }
+  .badge-preview { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: center; }
+  .badge-preview .badge { padding: 12px; }
+  .chip .ord { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--sun); color: #10283d; font-size: .75rem; margin-right: 6px; }
 </style>
 </head>
 <body>
@@ -53,6 +67,8 @@
         <button role="tab" type="button" data-tab="trip" aria-selected="true">Today's trip</button>
         <button role="tab" type="button" data-tab="cards" aria-selected="false">Report cards &amp; photos</button>
         <button role="tab" type="button" data-tab="res" aria-selected="false">Reservations</button>
+        <button role="tab" type="button" data-tab="stops" aria-selected="false">Stops &amp; badges</button>
+        <button role="tab" type="button" data-tab="trips" aria-selected="false">Trips</button>
         <button role="tab" type="button" data-tab="pups" aria-selected="false">Pups &amp; waivers</button>
         <button role="tab" type="button" data-tab="settings" aria-selected="false">Settings</button>
       </div>
@@ -118,6 +134,81 @@
         <div class="table-wrap"><table><thead><tr><th>Code</th><th>Trip</th><th>Pups</th><th>Human</th><th>Extras</th><th class="num">Total</th><th>Status</th></tr></thead><tbody id="res-body"></tbody></table></div>
       </div>
 
+      <!-- STOPS & BADGES -->
+      <div class="hq-panel" data-panel="stops" hidden>
+        <form class="stop-builder" id="stop-form" novalidate>
+          <div class="card stack">
+            <div class="row between"><h3 id="stop-form-title">Add a stop</h3><button class="btn ghost small" type="button" id="stop-cancel" hidden>Cancel editing</button></div>
+            <div class="fields">
+              <div class="field"><label for="s-name">Stop name</label><input id="s-name" type="text" required placeholder="Pumpkin Patch at Vertuccio Farms"></div>
+              <div class="field"><label for="s-short">Short name</label><input id="s-short" type="text" required maxlength="22" placeholder="Pumpkin Patch"><span class="hint">Shown on the map, stamps and tickets.</span></div>
+              <div class="field full"><label for="s-blurb">What pups do here</label><input id="s-blurb" type="text" required placeholder="Hay-bale hopping, pumpkin sniffing and the fall group photo."></div>
+            </div>
+            <div class="field">
+              <span class="label">Where is it?</span>
+              <div class="row" style="flex-wrap:nowrap"><input id="s-search" type="text" placeholder="Search an address or place" aria-label="Search an address"><button class="btn ghost small" type="button" id="s-find">Find</button><button class="btn ghost small" type="button" id="s-here" title="Use my current location">📍 Here</button></div>
+              <div class="map pick-map" id="pick-map"></div>
+              <span class="hint" id="s-coords">Tap the map to drop the pin, then drag it to fine-tune.</span>
+            </div>
+            <div class="fields">
+              <div class="field"><label for="s-scene">Scene</label><select id="s-scene"><option value="desert">Desert</option><option value="water">Water</option><option value="park">Park</option><option value="city">City</option><option value="mountain">Mountain</option><option value="sunset">Sunset</option><option value="home">Other</option></select><span class="hint">Sets the look of placeholder photos.</span></div>
+              <div class="field"><label for="s-emoji">Emoji</label><input id="s-emoji" type="text" maxlength="4" required><span class="hint">Pick one below or type your own.</span></div>
+              <div class="field full"><div class="emoji-pick" id="emoji-pick"></div></div>
+            </div>
+          </div>
+          <div class="card stack">
+            <h3>Its merit badge</h3>
+            <div class="badge-preview">
+              <div class="badge" id="b-preview"></div>
+              <div class="passport" style="padding:18px; display:grid; place-items:center"><div id="stamp-preview"></div></div>
+            </div>
+            <div class="field"><label for="b-name">Badge name</label>
+              <div class="row" style="flex-wrap:nowrap"><input id="b-name" type="text" required maxlength="24"><button class="btn sea small" type="button" id="b-surprise" style="white-space:nowrap">🎲 Surprise me</button></div></div>
+            <div class="field"><span class="label">Badge color</span><div class="swatches" id="b-colors"></div></div>
+            <div class="field"><label for="b-desc">Badge description</label><input id="b-desc" type="text" required maxlength="70"></div>
+            <button class="btn" type="submit" id="stop-save">Add stop &amp; badge</button>
+          </div>
+        </form>
+
+        <div class="stack">
+          <h3>All stops</h3>
+          <div class="table-wrap"><table><thead><tr><th>Stop</th><th>Badge</th><th class="num">Trips</th><th>Status</th><th></th></tr></thead><tbody id="stops-body"></tbody></table></div>
+        </div>
+
+        <form class="card stack" id="special-form" novalidate style="max-width:760px">
+          <h3>Special event badge</h3>
+          <p class="muted">For holidays, birthdays or one-off events. Not tied to a stop. Award it from the report card screen.</p>
+          <div class="fields">
+            <div class="field"><label for="sp-name">Badge name</label><input id="sp-name" type="text" required maxlength="24" placeholder="Pumpkin Patch Pup"></div>
+            <div class="field"><label for="sp-emoji">Emoji</label><input id="sp-emoji" type="text" required maxlength="4" placeholder="🎃"></div>
+            <div class="field full"><label for="sp-desc">Description</label><input id="sp-desc" type="text" required maxlength="70" placeholder="Rode along on the 2026 fall field trip."></div>
+            <div class="field full"><span class="label">Color</span><div class="swatches" id="sp-colors"></div></div>
+          </div>
+          <button class="btn sea" type="submit">Create special badge</button>
+        </form>
+      </div>
+
+      <!-- TRIPS -->
+      <div class="hq-panel" data-panel="trips" hidden>
+        <form class="card stack" id="trip-form" novalidate>
+          <h3>Schedule a field trip</h3>
+          <div class="fields">
+            <div class="field"><label for="t-name">Trip name</label><input id="t-name" type="text" required placeholder="Fall Harvest Loop"></div>
+            <div class="field"><label for="t-date">Date</label><input id="t-date" type="date" required></div>
+            <div class="field"><label for="t-start">Departs</label><input id="t-start" type="time" value="08:30" required></div>
+            <div class="field"><label for="t-end">Home by</label><input id="t-end" type="time" value="16:00" required></div>
+            <div class="field"><label for="t-cap">Seats</label><input id="t-cap" type="number" min="1" max="30" value="12" required></div>
+            <div class="field"><label class="check" style="margin-top:30px"><input type="checkbox" id="t-premium"> Road trip pricing ($95)</label></div>
+          </div>
+          <div class="field"><span class="label">Stops, in the order you'll visit them</span><div class="chips" id="t-stops"></div><span class="hint" id="t-order">Tap stops to add them to the route.</span></div>
+          <button class="btn" type="submit">Schedule trip</button>
+        </form>
+        <div class="stack">
+          <h3>Upcoming trips</h3>
+          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Trip</th><th>Route</th><th class="num">Seats left</th><th></th></tr></thead><tbody id="trips-body"></tbody></table></div>
+        </div>
+      </div>
+
       <!-- PUPS -->
       <div class="hq-panel" data-panel="pups" hidden>
         <div class="table-wrap"><table><thead><tr><th>Pup</th><th>Human</th><th>Waiver</th><th>Vaccines</th><th>Allergies / meds</th><th></th></tr></thead><tbody id="pups-body"></tbody></table></div>
@@ -137,6 +228,8 @@
 <div id="site-footer"></div>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="js/hq-stops.js"></script>
 <script src="js/hq.js"></script>
 </body>
 </html>

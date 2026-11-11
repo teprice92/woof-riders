@@ -17,6 +17,9 @@
     return s;
   }
 
+  const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+  const statusFor = (date) => (date < todayISO() ? "done" : date === todayISO() ? "live" : "upcoming");
+
   let state;
   function load() {
     try {
@@ -24,11 +27,18 @@
       if (raw) {
         const s = JSON.parse(raw);
         if (s && s.version === SEED.version) {
-          // Keep business data user-entered; refresh the reference lists from the seed file.
-          ["clubhouse", "locations", "badges", "subjects", "pricing", "business", "reportNotes"].forEach((k) => (s[k] = clone(SEED[k])));
+          // Refresh reference lists from the seed file.
+          ["clubhouse", "subjects", "pricing", "business", "reportNotes"].forEach((k) => (s[k] = clone(SEED[k])));
+          // Stops and badges: the owner can add and edit them in HQ. Seed entries the
+          // owner hasn't edited stay in sync with data.js; added or edited ones are kept.
+          ["locations", "badges"].forEach((k) => {
+            const list = s[k] || [];
+            SEED[k].forEach((x) => { const i = list.findIndex((y) => y.id === x.id); if (i < 0) list.push(clone(x)); else if (!list[i].edited) list[i] = clone(x); });
+            s[k] = list;
+          });
           // Keep sample trips' dates fresh relative to today.
           const seedTrips = Object.fromEntries(SEED.trips.map((t) => [t.id, t]));
-          s.trips.forEach((t) => { if (seedTrips[t.id]) { t.date = seedTrips[t.id].date; t.status = seedTrips[t.id].status; t.times = seedTrips[t.id].times; } });
+          s.trips.forEach((t) => { if (seedTrips[t.id]) { t.date = seedTrips[t.id].date; t.status = seedTrips[t.id].status; t.times = seedTrips[t.id].times; } else t.status = statusFor(t.date); });
           s.live = s.live || { manualStop: null, gps: null };
           if (s.live.day !== SEED.trips.find((t) => t.status === "live")?.date) s.live = { manualStop: null, gps: null };
           return s;
@@ -50,7 +60,8 @@
   const badge = (id) => byId(state.badges, id);
   const dog = (id) => byId(state.dogs, id);
   const trip = (id) => byId(state.trips, id);
-  const liveTrip = () => state.trips.find((t) => t.status === "live");
+  // A trip the owner scheduled for today takes priority over the sample one.
+  const liveTrip = () => state.trips.filter((t) => t.status === "live").sort((a, b) => (b.custom ? 1 : 0) - (a.custom ? 1 : 0))[0];
   const upcoming = () => state.trips.filter((t) => t.status === "upcoming").sort((a, b) => a.date.localeCompare(b.date));
 
   // ---------- formatting ----------
@@ -259,6 +270,6 @@
   window.WR = {
     get state() { return state; }, save, reset, toast, esc, uid, money, fmtDate, fmtTime, ageOf, parseDay, hash,
     loc, badge, dog, trip, liveTrip, upcoming, route, progress, visitedStops, dogTrips, reportCard, earnedBadges,
-    gradePaws, gradeClass, waiverStatus, vaccineStatus, seatsLeft, scene, dogPhoto, stopPhoto, medal, readImage, touchSafeMap
+    statusFor, gradePaws, gradeClass, waiverStatus, vaccineStatus, seatsLeft, scene, dogPhoto, stopPhoto, medal, readImage, touchSafeMap
   };
 })();
