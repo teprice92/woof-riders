@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Woof Riders Pack</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Yellowtail&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+  <header class="page-head">
+    <div class="wrap stack">
+      <p class="eyebrow">The Pack</p>
+      <h1 style="font-size:var(--step-3)">Meet the riders.</h1>
+      <p class="lede">Every pup on the Woof Bus has a Pup Passport with their badges, report cards and photos from every stop. Find yours.</p>
+      <div class="row" style="margin-top:8px">
+        <input type="text" id="search" placeholder="Search by name or breed" aria-label="Search pups" style="max-width:360px">
+        <a class="btn sea" href="join.html">Add your pup</a>
+      </div>
+    </div>
+  </header>
+  <section class="wrap" style="padding-bottom:96px">
+    <div class="grid" style="grid-template-columns:minmax(0,1fr) 340px; align-items:start" id="pack-layout">
+      <div class="grid g3" id="pups"></div>
+      <aside class="card raised">
+        <p class="eyebrow">Top Dogs</p>
+        <h3 style="margin:6px 0 10px">Badge leaderboard</h3>
+        <div id="leaders"></div>
+      </aside>
+    </div>
+  </section>
+</main>
+<div id="site-footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  const S = WR.state;
+  const rows = S.dogs.map((d) => ({ d, badges: WR.earnedBadges(d.id), trips: WR.dogTrips(d.id).length }));
+  function render(q) {
+    q = (q || "").toLowerCase();
+    const list = rows.filter((r) => !q || (r.d.name + " " + r.d.breed).toLowerCase().includes(q));
+    document.getElementById("pups").innerHTML = list.length ? list.map(({ d, badges, trips }) => `
+      <a class="pup-card" href="pup.html#${d.id}">
+        <div class="pup-photo">${WR.dogPhoto(d)}</div>
+        <div class="stack" style="gap:6px">
+          <div class="row between"><h3>${WR.esc(d.name)}</h3><span class="pill num">${trips} trip${trips === 1 ? "" : "s"}</span></div>
+          <p class="muted" style="font-size:.9rem">${WR.esc(d.breed)}</p>
+          <div class="mini-badges" aria-label="${badges.size} badges">${[...badges.keys()].slice(0, 8).map((id) => WR.badge(id).emoji).join("") || '<span class="muted" style="font-size:.85rem">No badges yet</span>'}${badges.size > 8 ? `<span class="muted" style="font-size:.85rem">+${badges.size - 8}</span>` : ""}</div>
+        </div>
+      </a>`).join("") : `<div class="empty" style="grid-column:1/-1"><strong>No pups match "${WR.esc(q)}"</strong><a href="join.html">Create a Pup Passport</a></div>`;
+  }
+  document.getElementById("search").addEventListener("input", (e) => render(e.target.value));
+  render();
+  document.getElementById("leaders").innerHTML = rows.slice().sort((a, b) => b.badges.size - a.badges.size || b.trips - a.trips).slice(0, 6).map((r, i) => `
+    <a class="leader" href="pup.html#${r.d.id}"><span class="rank">${i + 1}</span><span class="avatar" style="background:${r.d.avatarBg || "var(--sun-soft)"}">${r.d.photo ? `<img src="${r.d.photo}" alt="">` : r.d.emoji}</span>
+    <span><strong>${WR.esc(r.d.name)}</strong><br><small class="muted">${r.trips} trips</small></span><span class="pill sea num">${r.badges.size} 🏅</span></a>`).join("");
+  const mq = matchMedia("(max-width: 960px)");
+  const lay = () => (document.getElementById("pack-layout").style.gridTemplateColumns = mq.matches ? "minmax(0,1fr)" : "minmax(0,1fr) 340px");
+  mq.addEventListener("change", lay); lay();
+})();
+</script>
+</body>
+</html>

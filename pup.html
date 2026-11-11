@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pup Passport</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Yellowtail&display=swap">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main id="pup-main">
+  <section class="page-head">
+    <div class="wrap stack-lg">
+      <div id="welcome" hidden></div>
+      <div class="pup-hero">
+        <div class="pup-photo" id="pup-photo"></div>
+        <div>
+          <p class="eyebrow">Pup Passport</p>
+          <h1 id="pup-name" style="margin-top:8px">Pup</h1>
+          <p class="lede" id="pup-sub" style="margin-top:10px"></p>
+          <div class="row" id="pup-pills" style="margin-top:14px"></div>
+          <div class="stat-row" id="pup-stats"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight alt">
+    <div class="wrap">
+      <div class="row between" style="margin-bottom:28px; align-items:end">
+        <div class="stack" style="gap:8px"><p class="eyebrow">Merit badge sash</p><h2 style="font-size:var(--step-2)" id="badge-head">Badges</h2></div>
+        <a class="link-arrow" href="badges.html">How badges work</a>
+      </div>
+      <div class="badge-grid compact" id="pup-badges"></div>
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap stack-lg">
+      <div class="stack" style="gap:8px">
+        <p class="eyebrow">Trip journal</p>
+        <h2 style="font-size:var(--step-2)">Report cards &amp; stop photos</h2>
+        <p class="muted">Pick a field trip to see how your pup did and a photo from every stop.</p>
+      </div>
+      <div class="trip-pick" id="trip-pick" role="group" aria-label="Choose a trip"></div>
+      <div class="report" id="report"></div>
+    </div>
+  </section>
+
+  <section class="band tight alt">
+    <div class="wrap grid g2" style="align-items:start">
+      <div class="stack">
+        <p class="eyebrow">Where they've been</p>
+        <h2 style="font-size:var(--step-2)">Passport map</h2>
+        <div class="map short" id="map" style="border-radius:var(--radius-lg); border:1px solid var(--line)"></div>
+      </div>
+      <div class="stack">
+        <p class="eyebrow">Pup facts</p>
+        <h2 style="font-size:var(--step-2)">Need-to-know</h2>
+        <div class="card" id="facts"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/pup.js"></script>
+</body>
+</html>

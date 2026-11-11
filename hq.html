@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pack Leader HQ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Yellowtail&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .hq-panel { display: grid; gap: 24px; }
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .kpi { padding: 18px 20px; }
+  .kpi strong { display: block; font-family: var(--font-display); font-size: 2rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .kpi span { color: var(--muted); font-size: .9rem; font-weight: 600; }
+  @media (max-width: 760px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .roster { display: grid; gap: 8px; }
+  .roster label { display: flex; gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; }
+  .roster .avatar { width: 36px; height: 36px; font-size: 1.1rem; }
+  .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .photo-grid .photo-drop { min-height: 0; aspect-ratio: 4 / 3; padding: 10px; font-size: .88rem; }
+  .photo-grid .photo-drop .cap { position: absolute; left: 8px; bottom: 8px; z-index: 2; background: rgba(0,0,0,.55); color: #fff; padding: 3px 8px; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+  .grade-select { display: grid; grid-template-columns: minmax(0, 1fr) 110px; gap: 12px; align-items: center; padding-block: 8px; border-bottom: 1px solid var(--line); }
+  #gate { max-width: 440px; margin: 0 auto; text-align: center; }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+  <header class="page-head">
+    <div class="wrap stack">
+      <p class="eyebrow">Staff only</p>
+      <h1 style="font-size:var(--step-3)">Pack Leader HQ</h1>
+      <p class="lede">Run today's trip, post Pupdates, grade report cards, upload stop photos and manage reservations.</p>
+    </div>
+  </header>
+
+  <section class="wrap" style="padding-bottom:96px">
+    <form class="form-card stack" id="gate">
+      <h3>Crew sign-in</h3>
+      <p class="muted">Demo PIN: <span class="kbd">WOOF</span></p>
+      <input type="password" id="pin" aria-label="Crew PIN" autocomplete="off" placeholder="PIN">
+      <button class="btn sea" type="submit">Open HQ</button>
+    </form>
+
+    <div id="hq" hidden class="stack-lg">
+      <div class="kpis" id="kpis"></div>
+      <div class="tabs" role="tablist" id="tabs">
+        <button role="tab" type="button" data-tab="trip" aria-selected="true">Today's trip</button>
+        <button role="tab" type="button" data-tab="cards" aria-selected="false">Report cards &amp; photos</button>
+        <button role="tab" type="button" data-tab="res" aria-selected="false">Reservations</button>
+        <button role="tab" type="button" data-tab="pups" aria-selected="false">Pups &amp; waivers</button>
+        <button role="tab" type="button" data-tab="settings" aria-selected="false">Settings</button>
+      </div>
+
+      <!-- TODAY'S TRIP -->
+      <div class="hq-panel" data-panel="trip">
+        <div class="grid g2" style="align-items:start">
+          <div class="card stack">
+            <h3>Bus location</h3>
+            <p class="muted" id="bus-status"></p>
+            <div class="field"><label for="bus-at">Where's the bus?</label>
+              <select id="bus-at"></select>
+              <span class="hint">"Follow the schedule" moves the bus automatically by trip times. Pick a stop to override.</span></div>
+            <div class="row"><button class="btn sea small" type="button" id="gps-btn">Share live GPS from this phone</button><button class="btn ghost small" type="button" id="gps-stop" hidden>Stop sharing</button></div>
+            <p class="hint muted" style="font-size:.85rem">GPS sharing needs the site to be hosted with a shared database so parents see the same position. See README.</p>
+          </div>
+          <div class="card stack">
+            <h3>Post a Pupdate</h3>
+            <div class="field"><label for="pu-stop">Stop</label><select id="pu-stop"></select></div>
+            <div class="field"><label for="pu-url">Instagram post link</label><input id="pu-url" type="url" placeholder="https://www.instagram.com/p/…"><span class="hint">Paste the link from Instagram's Share → Copy link. It embeds on the tracker map.</span></div>
+            <p class="muted" style="text-align:center; font-size:.85rem">or post directly</p>
+            <div class="field"><label for="pu-cap">Caption</label><input id="pu-cap" type="text" placeholder="Splash Pawty in session!"></div>
+            <div class="field"><label for="pu-img">Photo</label><input id="pu-img" type="file" accept="image/*"></div>
+            <div class="field"><span class="label">Tag pups</span><div class="chips" id="pu-tags"></div></div>
+            <button class="btn" type="button" id="pu-post">Post to tracker</button>
+          </div>
+        </div>
+        <div class="card stack">
+          <div class="row between"><h3>Roster check-in</h3><span class="pill" id="checkin-count"></span></div>
+          <div class="roster grid g3" id="roster"></div>
+        </div>
+      </div>
+
+      <!-- REPORT CARDS -->
+      <div class="hq-panel" data-panel="cards" hidden>
+        <div class="card fields">
+          <div class="field"><label for="rc-trip">Trip</label><select id="rc-trip"></select></div>
+          <div class="field"><label for="rc-dog">Pup</label><select id="rc-dog"></select></div>
+        </div>
+        <div class="grid g2" style="align-items:start">
+          <div class="card stack">
+            <h3>Grades</h3>
+            <div id="rc-grades"></div>
+            <div class="field"><label for="rc-note">Notes from the Pack Leader</label><textarea id="rc-note"></textarea></div>
+            <div class="fields">
+              <div class="field"><label for="rc-miles">Miles sniffed</label><input id="rc-miles" type="number" step="0.1" min="0"></div>
+              <div class="field"><label for="rc-treats">Treats</label><input id="rc-treats" type="number" min="0"></div>
+              <div class="field full"><label for="rc-buddy">Best bus buddy</label><select id="rc-buddy"></select></div>
+              <div class="field full"><label for="rc-award">Award a bonus badge</label><select id="rc-award"></select></div>
+            </div>
+            <button class="btn sea" type="button" id="rc-save">Save report card</button>
+          </div>
+          <div class="card stack">
+            <h3>Stop photos</h3>
+            <p class="muted">One photo per stop. Tap a tile to upload. These show on the pup's passport.</p>
+            <div class="photo-grid" id="rc-photos"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESERVATIONS -->
+      <div class="hq-panel" data-panel="res" hidden>
+        <div class="table-wrap"><table><thead><tr><th>Code</th><th>Trip</th><th>Pups</th><th>Human</th><th>Extras</th><th class="num">Total</th><th>Status</th></tr></thead><tbody id="res-body"></tbody></table></div>
+      </div>
+
+      <!-- PUPS -->
+      <div class="hq-panel" data-panel="pups" hidden>
+        <div class="table-wrap"><table><thead><tr><th>Pup</th><th>Human</th><th>Waiver</th><th>Vaccines</th><th>Allergies / meds</th><th></th></tr></thead><tbody id="pups-body"></tbody></table></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="hq-panel" data-panel="settings" hidden>
+        <div class="card stack" style="max-width:640px">
+          <h3>Demo data</h3>
+          <p class="muted">Everything on this site is saved in this browser only. Resetting brings back the sample pups, trips and reservations.</p>
+          <div class="row"><button class="btn ghost" type="button" id="reset-ask">Reset demo data</button><button class="btn" type="button" id="reset-yes" hidden>Yes, erase and reset</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="site-footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/hq.js"></script>
+</body>
+</html>

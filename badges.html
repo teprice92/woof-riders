@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Woof Riders Badge Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Yellowtail&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+  <header class="page-head">
+    <div class="wrap stack">
+      <p class="eyebrow">The Badge Book</p>
+      <h1 style="font-size:var(--step-3)">Earn your stripes.<br><span class="muted">Well, patches.</span></h1>
+      <p class="lede">Badges are earned automatically on the bus. Visit a new stop, hit a ride milestone or ace a report card subject, and the badge is stitched onto your pup's sash.</p>
+    </div>
+  </header>
+  <section class="band tight">
+    <div class="wrap stack-lg">
+      <div class="stack" style="gap:6px"><h2 style="font-size:var(--step-2)">Adventure badges</h2><p class="muted">Earned the first time a pup visits each stop.</p></div>
+      <div class="badge-grid" id="b-place"></div>
+    </div>
+  </section>
+  <section class="band tight alt">
+    <div class="wrap grid g2" style="align-items:start">
+      <div class="stack-lg">
+        <div class="stack" style="gap:6px"><h2 style="font-size:var(--step-2)">Milestone badges</h2><p class="muted">For racking up rides on the Woof Bus.</p></div>
+        <div class="badge-grid" id="b-milestone"></div>
+      </div>
+      <div class="stack-lg">
+        <div class="stack" style="gap:6px"><h2 style="font-size:var(--step-2)">Honor roll badges</h2><p class="muted">For an A+ on a report card subject.</p></div>
+        <div class="badge-grid" id="b-grade"></div>
+      </div>
+    </div>
+  </section>
+  <section class="band tight">
+    <div class="wrap">
+      <div class="cta-band"><div><h2>Start the collection.</h2><p>Your pup's first ride earns the First Ride badge plus a badge for every stop on the route.</p></div><div class="row"><a class="btn" href="book.html">Book a Ride</a><a class="btn ghost" href="pack.html">See the pack</a></div></div>
+    </div>
+  </section>
+</main>
+<div id="site-footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function () {
+  const S = WR.state;
+  const counts = {}; S.dogs.forEach((d) => WR.earnedBadges(d.id).forEach((_, id) => (counts[id] = (counts[id] || 0) + 1)));
+  ["place", "milestone", "grade"].forEach((k) => {
+    document.getElementById("b-" + k).innerHTML = S.badges.filter((b) => b.kind === k).map((b) => {
+      const where = b.location ? WR.loc(b.location).name : "";
+      return `<div class="badge"><div class="medal" style="--c:${b.color}" aria-hidden="true">${b.emoji}</div><h4>${WR.esc(b.name)}</h4><small>${WR.esc(b.desc)}</small>${where ? `<small><strong>${WR.esc(where)}</strong></small>` : ""}<span class="pill num">${counts[b.id] || 0} pup${counts[b.id] === 1 ? "" : "s"} earned</span></div>`;
+    }).join("");
+  });
+})();
+</script>
+</body>
+</html>

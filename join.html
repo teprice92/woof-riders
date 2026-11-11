@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pup Passport Sign-Up</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Yellowtail&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main>
+  <header class="page-head">
+    <div class="wrap stack">
+      <p class="eyebrow">Pup Passport</p>
+      <h1 style="font-size:var(--step-3)">Every great adventure<br>starts with paperwork. <span class="script">(Sorry!)</span></h1>
+      <p class="lede">Tell us about your pup once, sign the liability waiver, and you're cleared for every field trip. Takes about 5 minutes. Treats not required, but encouraged.</p>
+      <div class="tabs" role="tablist" style="margin-top:12px">
+        <button role="tab" id="tab-new" aria-selected="true" type="button">New pup</button>
+        <button role="tab" id="tab-existing" aria-selected="false" type="button">Sign waiver for an existing pup</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="wrap" style="max-width:920px; padding-bottom:96px">
+    <ol class="steps" id="steps">
+      <li data-step="0">The Basics</li><li data-step="1">Health</li><li data-step="2">Personality</li><li data-step="3">Humans</li><li data-step="4">Waiver</li>
+    </ol>
+
+    <form class="form-card" id="passport-form" novalidate>
+      <!-- STEP 1 -->
+      <fieldset data-step="0">
+        <legend>The basics</legend>
+        <div class="fields">
+          <div class="field full" style="grid-template-columns: 160px minmax(0,1fr); gap:20px; align-items:center">
+            <label class="photo-drop" for="f-photo" id="photo-drop" style="min-height:160px; border-radius:50%; aspect-ratio:1; max-width:160px">
+              <span><strong>Add a photo</strong><br><small>Best side, please</small></span>
+              <input type="file" id="f-photo" accept="image/*">
+            </label>
+            <p class="muted">A clear, smiley face photo helps our crew recognize your pup at pickup. It also becomes their Pup Passport picture.</p>
+          </div>
+          <div class="field"><label for="f-name">Pup's name</label><input id="f-name" name="name" type="text" required autocomplete="off" placeholder="Biscuit"></div>
+          <div class="field"><label for="f-breed">Breed</label><input id="f-breed" name="breed" type="text" required placeholder="Corgi, mutt, mystery mix…"></div>
+          <div class="field"><label for="f-sex">Sex</label><select id="f-sex" name="sex" required><option value="">Choose…</option><option>Male</option><option>Female</option></select></div>
+          <div class="field"><label for="f-fixed">Spayed / neutered?</label><select id="f-fixed" name="fixed" required><option value="">Choose…</option><option>Yes</option><option>Not yet (under 7 months)</option><option>No</option></select></div>
+          <div class="field"><label for="f-birthday">Birthday (or best guess)</label><input id="f-birthday" name="birthday" type="date" required></div>
+          <div class="field"><label for="f-weight">Weight (lbs)</label><input id="f-weight" name="weight" type="number" min="3" max="250" required inputmode="numeric"></div>
+          <div class="field full"><label for="f-color">Color &amp; markings</label><input id="f-color" name="color" type="text" placeholder="Red & white, one floppy ear"></div>
+        </div>
+      </fieldset>
+
+      <!-- STEP 2 -->
+      <fieldset data-step="1" hidden>
+        <legend>Health &amp; vaccines</legend>
+        <p class="muted">Enter each vaccine's <strong>expiration</strong> date. We'll remind you before anything lapses.</p>
+        <div class="fields">
+          <div class="field"><label for="f-rabies">Rabies expires</label><input id="f-rabies" name="rabies" type="date" required></div>
+          <div class="field"><label for="f-dhpp">DHPP expires</label><input id="f-dhpp" name="dhpp" type="date" required></div>
+          <div class="field"><label for="f-bord">Bordetella expires</label><input id="f-bord" name="bordetella" type="date" required></div>
+          <div class="field"><label for="f-flea">Flea &amp; tick prevention</label><select id="f-flea" name="flea" required><option value="">Choose…</option><option>Yes, monthly</option><option>No</option></select></div>
+          <div class="field"><label for="f-vet">Veterinarian / clinic</label><input id="f-vet" name="vetName" type="text" required></div>
+          <div class="field"><label for="f-vetphone">Vet phone</label><input id="f-vetphone" name="vetPhone" type="tel" required></div>
+          <div class="field"><label for="f-allergies">Allergies</label><input id="f-allergies" name="allergies" type="text" placeholder="Food, environmental, or none"></div>
+          <div class="field"><label for="f-meds">Medications</label><input id="f-meds" name="meds" type="text" placeholder="Name, dose, when"></div>
+          <div class="field full"><label for="f-medical">Anything else our crew should know?</label><textarea id="f-medical" name="medical" placeholder="Past injuries, heat sensitivity, seizures, surgeries…"></textarea></div>
+        </div>
+      </fieldset>
+
+      <!-- STEP 3 -->
+      <fieldset data-step="2" hidden>
+        <legend>Personality</legend>
+        <div class="field"><span class="label">Energy level</span>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="energy" value="Couch potato" required><span class="face"><strong>Couch potato</strong><small>Short walks, long naps</small></span></label>
+            <label class="choice"><input type="radio" name="energy" value="Easygoing"><span class="face"><strong>Easygoing</strong><small>Up for anything, within reason</small></span></label>
+            <label class="choice"><input type="radio" name="energy" value="Zoomie machine"><span class="face"><strong>Zoomie machine</strong><small>Runs on rocket fuel</small></span></label>
+          </div>
+        </div>
+        <div class="field"><span class="label">Describe your pup (pick any)</span>
+          <div class="chips" id="temperament">
+          </div>
+        </div>
+        <div class="fields">
+          <div class="field"><label for="f-likes">Favorite things</label><input id="f-likes" name="likes" type="text" placeholder="Tennis balls, swimming, belly rubs"></div>
+          <div class="field"><label for="f-fears">Fears or triggers</label><input id="f-fears" name="fears" type="text" placeholder="Skateboards, thunder, men in hats"></div>
+          <div class="field full"><label for="f-recall">How's their recall?</label><select id="f-recall" name="recall" required><option value="">Choose…</option><option>Comes every time</option><option>Comes most of the time</option><option>Selective hearing</option><option>What's recall?</option></select></div>
+          <div class="field full"><label class="check"><input type="checkbox" id="f-bite" name="biteHistory"> My dog has bitten or seriously injured a person or animal before. (We'll call you to talk it through.)</label></div>
+        </div>
+      </fieldset>
+
+      <!-- STEP 4 -->
+      <fieldset data-step="3" hidden>
+        <legend>The humans</legend>
+        <div class="fields">
+          <div class="field"><label for="f-oname">Your name</label><input id="f-oname" name="ownerName" type="text" required autocomplete="name"></div>
+          <div class="field"><label for="f-oemail">Email</label><input id="f-oemail" name="ownerEmail" type="email" required autocomplete="email"></div>
+          <div class="field"><label for="f-ophone">Mobile phone</label><input id="f-ophone" name="ownerPhone" type="tel" required autocomplete="tel"></div>
+          <div class="field"><label for="f-oig">Instagram handle (optional)</label><input id="f-oig" name="ownerIg" type="text" placeholder="@" ></div>
+          <div class="field full"><label for="f-addr">Pickup address</label><input id="f-addr" name="address" type="text" autocomplete="street-address" placeholder="Only needed for door-to-door pickup"></div>
+          <div class="field"><label for="f-ename">Emergency contact</label><input id="f-ename" name="emergencyName" type="text" required></div>
+          <div class="field"><label for="f-ephone">Emergency phone</label><input id="f-ephone" name="emergencyPhone" type="tel" required></div>
+          <div class="field full"><label class="check"><input type="checkbox" id="f-texts" name="texts" checked> Text me Pupdates during field trips</label></div>
+        </div>
+      </fieldset>
+
+      <!-- STEP 5: WAIVER -->
+      <fieldset data-step="4" hidden id="waiver">
+        <legend>Liability waiver &amp; release</legend>
+        <div class="field" id="existing-pick" hidden>
+          <label for="f-existing">Which pup is this waiver for?</label>
+          <select id="f-existing"></select>
+        </div>
+        <!-- TEMPLATE LANGUAGE: have a licensed attorney in your state review before real use. -->
+        <div class="waiver-text" tabindex="0" aria-label="Waiver terms">
+          <h4>1. Assumption of risk</h4>
+          <p>I understand that field trips involve transportation, outdoor activity, off-leash and on-leash play with other dogs, water, heat, uneven terrain and wildlife. These carry inherent risks including bites, scratches, illness, parasites, heat stress, injury and, rarely, death. I voluntarily accept these risks on behalf of my dog.</p>
+          <h4>2. Health and vaccinations</h4>
+          <p>I confirm my dog is in good health, current on Rabies, DHPP and Bordetella vaccines, and on flea and tick prevention. I will tell Woof Riders about any change in health or behavior before my dog's next ride.</p>
+          <h4>3. Transportation</h4>
+          <p>I authorize Woof Riders to transport my dog in its vehicles to and from field trip destinations, secured with a harness restraint.</p>
+          <h4>4. Behavior and dismissal</h4>
+          <p>I confirm my dog has no history of aggression except as disclosed. Woof Riders may separate, send home or decline future service for any dog whose behavior puts people or other dogs at risk. I am responsible for any damage or injury my dog causes.</p>
+          <h4>5. Emergency veterinary care</h4>
+          <p>If my dog needs urgent care and I can't be reached, I authorize Woof Riders to take my dog to the nearest available veterinarian and approve treatment up to $1,000. I agree to pay all resulting veterinary costs.</p>
+          <h4>6. Photos and social media</h4>
+          <p>I allow Woof Riders to photograph and film my dog and share those images on its website, Instagram and other channels, including on the live trip tracker.</p>
+          <h4>7. Release and indemnity</h4>
+          <p>To the fullest extent allowed by law, I release Woof Riders, its owners, employees and agents from claims arising from my dog's participation, except those caused by gross negligence or willful misconduct, and I agree to indemnify them against claims caused by my dog.</p>
+          <h4>8. Pickup and payment</h4>
+          <p>I will pay for services as booked and pick up my dog at the agreed time. Late pickups after 30 minutes may be charged $1 per minute.</p>
+        </div>
+        <div>
+          <p class="label" style="margin-bottom:4px">Initial each key section</p>
+          <div class="initial-row"><span>I accept the risks of field trips (section 1).</span><input type="text" id="i-1" maxlength="4" required aria-label="Initials for section 1"></div>
+          <div class="initial-row"><span>My dog is healthy and vaccinated (section 2).</span><input type="text" id="i-2" maxlength="4" required aria-label="Initials for section 2"></div>
+          <div class="initial-row"><span>I authorize emergency vet care up to $1,000 (section 5).</span><input type="text" id="i-5" maxlength="4" required aria-label="Initials for section 5"></div>
+          <div class="initial-row"><span>I release Woof Riders as described (section 7).</span><input type="text" id="i-7" maxlength="4" required aria-label="Initials for section 7"></div>
+        </div>
+        <label class="check"><input type="checkbox" id="f-photos" checked> Yes, my pup can star in Woof Riders photos and Instagram posts (section 6).</label>
+        <div class="fields">
+          <div class="field"><label for="f-signer">Full legal name</label><input id="f-signer" type="text" required autocomplete="name"></div>
+          <div class="field"><label for="f-sigdate">Date</label><input id="f-sigdate" type="date" required readonly></div>
+        </div>
+        <div class="field">
+          <span class="label">Signature</span>
+          <div class="sig-pad"><canvas id="sig" aria-label="Signature pad. Draw your signature with a mouse or finger."></canvas><span class="sig-line"></span><span class="sig-x">×</span><button class="btn ghost small clear" type="button" id="sig-clear">Clear</button></div>
+          <span class="hint">Draw with your mouse or finger.</span>
+        </div>
+        <label class="check"><input type="checkbox" id="f-agree" required> I've read the full waiver, I'm the dog's owner or legal guardian, and I agree to these terms.</label>
+      </fieldset>
+
+      <div class="row between" style="margin-top:32px">
+        <button class="btn ghost" type="button" id="back">Back</button>
+        <span class="muted" id="step-count"></span>
+        <button class="btn sea" type="button" id="next">Next</button>
+        <button class="btn" type="submit" id="submit" hidden>Sign &amp; create Pup Passport</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/join.js"></script>
+</body>
+</html>
