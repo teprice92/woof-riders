@@ -8,14 +8,22 @@
   if (!WR.dog(id) && raw) WR.toast("We couldn't find that pup, so here's " + d.name + ".");
   document.title = d.name + "'s Pup Passport";
 
+  const passNo = "WR-" + String(WR.hash(d.id) % 90000 + 10000);
+  const issued = d.createdAt || new Date().toISOString().slice(0, 10);
+  const stampDate = (iso) => WR.fmtDate(iso, { day: "2-digit", month: "short", year: "2-digit" }).toUpperCase();
+
   if (flag) {
     const w = document.getElementById("welcome"); w.hidden = false;
-    w.className = "notice sea";
-    w.innerHTML = flag === "welcome"
-      ? `<strong>Welcome aboard, ${WR.esc(d.name)}!</strong> Your Pup Passport and waiver are saved. Next up: <a href="book.html#${d.id}">book a first ride</a> to earn the First Ride badge.`
-      : `<strong>Waiver signed.</strong> ${WR.esc(d.name)} is cleared for field trips. <a href="book.html#${d.id}">Book a ride</a>.`;
+    w.className = "notice sea welcome-stamp";
+    w.innerHTML = (flag === "welcome"
+      ? `<div class="pstamp ink thump" style="--c:var(--sea);--r:-8deg"><span class="top">Passport</span><span class="em">🐾</span><span class="name">Issued</span><span class="date">${stampDate(issued)}</span></div>
+         <div class="stack" style="gap:6px; flex:1 1 260px"><strong style="font-size:1.2rem">Welcome aboard, ${WR.esc(d.name)}!</strong><p>Pup Passport ${passNo} is issued and the waiver is on file. Next up: <a href="book.html#${d.id}">book a first ride</a> to earn the First Ride badge and your first stamp.</p></div>`
+      : `<div class="pstamp ink thump rect" style="--c:var(--good);--r:6deg"><span class="top">Waiver</span><span class="em">✓</span><span class="name">Approved</span><span class="date">${stampDate(new Date().toISOString().slice(0, 10))}</span></div>
+         <div class="stack" style="gap:6px; flex:1 1 260px"><strong style="font-size:1.2rem">Waiver signed.</strong><p>${WR.esc(d.name)} is cleared for field trips. <a href="book.html#${d.id}">Book a ride</a>.</p></div>`);
     history.replaceState(null, "", "#" + d.id);
   }
+  document.getElementById("issued").innerHTML = `Passport<b>${passNo}</b>Issued ${stampDate(issued)}`;
+  document.getElementById("passport-no").textContent = "No. " + passNo;
 
   // ---------- hero ----------
   document.getElementById("pup-photo").innerHTML = WR.dogPhoto(d);
@@ -35,6 +43,18 @@
     [trips.length, "field trips"], [earned.size + "/" + S.badges.length, "badges earned"], [places.size, "places explored"], [miles.toFixed(1), "miles sniffed"]
   ].map(([n, l]) => `<div class="stat"><strong>${n}</strong><span>${l}</span></div>`).join("");
 
+  // ---------- passport stamps ----------
+  const firstVisit = {};
+  trips.slice().reverse().forEach((t) => WR.visitedStops(t, d.id).forEach((l) => { if (!firstVisit[l]) firstVisit[l] = t.date; }));
+  const shapes = ["", "rect", "oval"];
+  const visitedLocs = S.locations.filter((l) => firstVisit[l.id]).sort((a, b) => firstVisit[a.id].localeCompare(firstVisit[b.id]));
+  const notYet = S.locations.filter((l) => !firstVisit[l.id]);
+  document.getElementById("stamp-head").textContent = `${visitedLocs.length} of ${S.locations.length} stamps collected`;
+  document.getElementById("stamps").innerHTML = visitedLocs.map((l) => {
+    const h = WR.hash(d.id + l.id), b = S.badges.find((x) => x.location === l.id);
+    return `<div class="pstamp ink ${shapes[h % 3]}" style="--c:${b ? b.color : "var(--sunset)"};--r:${(h % 17) - 8}deg" title="${WR.esc(l.name)}"><span class="top">Woof Riders</span><span class="em" aria-hidden="true">${l.emoji}</span><span class="name">${WR.esc(l.short)}</span><span class="date">${stampDate(firstVisit[l.id])}</span></div>`;
+  }).join("") + notYet.map((l) => `<div class="pstamp empty"><span class="top">Not yet</span><span class="em" aria-hidden="true">${l.emoji}</span><span class="name">${WR.esc(l.short)}</span></div>`).join("");
+
   // ---------- badges ----------
   document.getElementById("badge-head").textContent = earned.size ? `${earned.size} earned, ${S.badges.length - earned.size} to go` : "First badge is one ride away";
   const sorted = S.badges.slice().sort((a, b) => (earned.has(b.id) ? 1 : 0) - (earned.has(a.id) ? 1 : 0));
@@ -52,6 +72,12 @@
   }
   pick.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; current = b.dataset.id; renderPick(); renderReport(); });
 
+  function verdict(grades) {
+    const vals = Object.values(grades || {}).map(WR.gradePaws); if (!vals.length) return "";
+    const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+    const [label, c] = avg >= 4.6 ? ["Top Dog", "var(--good)"] : avg >= 3.8 ? ["Good Pup", "var(--sea)"] : ["Getting There", "var(--sunset)"];
+    return `<div class="mini-stamp ink" style="--c:${c}">Verdict<b>${label}</b></div>`;
+  }
   function renderReport() {
     const box = document.getElementById("report");
     if (!current) {
@@ -72,7 +98,7 @@
       const f = rc.facts || {};
       card = `<div class="report-card"><header><div><h3>${WR.esc(t.name)}</h3><span style="opacity:.75">${WR.fmtDate(t.date, { weekday: "long", month: "long", day: "numeric" })}</span></div><span class="script">Pupdate Report</span></header>
         ${rows}
-        <div class="report-note"><span class="script">Notes from the Pack Leader</span><p>${WR.esc(rc.note)}</p></div>
+        <div class="report-note">${verdict(rc.grades)}<span class="script">Notes from the Pack Leader</span><p>${WR.esc(rc.note)}</p></div>
         <div class="report-facts">${f.miles ? `<span class="pill sea num">${f.miles} miles sniffed</span>` : ""}${f.treats ? `<span class="pill num">${f.treats} treats</span>` : ""}${f.buddy ? `<span class="pill">Best bus buddy: ${WR.esc(f.buddy)}</span>` : ""}</div></div>`;
     }
     const stops = t.status === "live" ? WR.visitedStops(t, d.id) : t.stops;

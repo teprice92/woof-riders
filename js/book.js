@@ -70,13 +70,45 @@
     if (!WR.save()) return;
     form.hidden = true;
     const done = document.getElementById("done"); done.hidden = false;
-    done.innerHTML = `<div class="form-card stack-lg" style="max-width:760px; margin-inline:auto; text-align:center; justify-items:center">
-      <div class="medal" style="--c:#f2602f">🚌</div>
-      <div class="stack" style="justify-items:center"><span class="script" style="font-size:2rem">Pawsome!</span><h2>${c.pups.map((p) => WR.esc(p.name)).join(" & ")} ${c.pups.length > 1 ? "are" : "is"} on the list.</h2>
-      <p class="lede">${WR.esc(c.t.name)} · ${WR.fmtDate(c.t.date, { weekday: "long", month: "long", day: "numeric" })}. ${c.door ? "We'll text you a pickup window the night before." : `Drop-off at the clubhouse by ${WR.fmtTime(c.t.times[0])}.`}</p></div>
-      <p class="pill sea num" style="font-size:1rem; padding:10px 16px">Confirmation ${id} · ${WR.money(c.total)}</p>
-      <p class="muted">Your request is pending until our crew confirms it, usually within a couple of hours.</p>
-      <div class="row" style="justify-content:center"><a class="btn" href="pup.html#${c.pups[0].id}">View ${WR.esc(c.pups[0].name)}'s Pup Passport</a><a class="btn ghost" href="book.html">Book another ride</a></div></div>`;
+    const first = WR.loc(c.t.stops[0]);
+    const seats = c.pups.map((p, i) => (2 + (WR.hash(id + p.id) % 5)) + "ABCD"[(WR.hash(p.id) + i) % 4]);
+    // Barcode drawn from the confirmation code so each pass looks unique.
+    let x = 0; const bars = []; const bits = (WR.hash(id) >>> 0).toString(2).padStart(32, "1") + (WR.hash(id + "x") >>> 0).toString(2).padStart(32, "0");
+    for (const bit of bits) { const w = bit === "1" ? 3 : 1.5; bars.push(`var(--ink) ${x}px ${x + w}px`, `transparent ${x + w}px ${x + w + 2}px`); x += w + 2; }
+    const barcode = `background: linear-gradient(90deg, ${bars.join(", ")}) 0 0 / ${x}px 100% repeat-x;`;
+    const dateStr = WR.fmtDate(c.t.date, { weekday: "short", month: "short", day: "numeric" });
+    done.innerHTML = `<div class="stack-lg">
+      <div class="stack" style="justify-items:center; text-align:center; gap:10px"><p class="eyebrow">You're booked</p><h2>${c.pups.map((p) => WR.esc(p.name)).join(" & ")} ${c.pups.length > 1 ? "are" : "is"} on the list.</h2>
+        <p class="muted">Your request is pending until our crew confirms it, usually within a couple of hours. We'll text you a payment link.</p></div>
+      <article class="boarding" aria-label="Boarding pass">
+        <div class="bp-main">
+          <div class="bp-head"><img src="assets/logo-sm.png" alt=""><strong>Woof Bus</strong><span>Boarding pass</span></div>
+          <div class="bp-route">
+            <div><div class="code">${c.door ? "Home" : "Club"}</div><div class="place">${c.door ? "Your front door" : WR.esc(WR.state.clubhouse.name)}</div></div>
+            <div class="bus" aria-hidden="true">🚌</div>
+            <div class="to"><div class="code">${WR.esc(first.short.split(" ")[0])}</div><div class="place">${WR.esc(first.name)}${c.t.stops.length > 1 ? ` + ${c.t.stops.length - 1} more` : ""}</div></div>
+          </div>
+          <div class="bp-fields">
+            <div class="bp-field wide"><small>Passenger${c.pups.length > 1 ? "s" : ""}</small><strong>${c.pups.map((p) => WR.esc(p.name)).join(", ")}</strong></div>
+            <div class="bp-field"><small>Seat${seats.length > 1 ? "s" : ""}</small><strong>${seats.join(" ")}</strong></div>
+            <div class="bp-field"><small>Class</small><strong>${c.t.premium ? "Road trip" : "Field trip"}</strong></div>
+            <div class="bp-field wide"><small>Trip</small><strong>${WR.esc(c.t.name)}</strong></div>
+            <div class="bp-field"><small>Date</small><strong>${dateStr}</strong></div>
+            <div class="bp-field"><small>${c.door ? "Pickup" : "Boards"}</small><strong>${c.door ? "Window by text" : WR.fmtTime(c.t.times[0])}</strong></div>
+            <div class="bp-field wide"><small>Extras</small><strong>${c.addons.map((a) => WR.esc(a.name)).join(", ") || "None"}</strong></div>
+            <div class="bp-field"><small>Home by</small><strong>${WR.fmtTime(c.t.times[c.t.times.length - 1])}</strong></div>
+            <div class="bp-field"><small>Total</small><strong>${WR.money(c.total)}</strong></div>
+          </div>
+        </div>
+        <div class="bp-stub">
+          <div class="bp-field"><small>Confirmation</small><strong style="font-size:1.6rem">${id}</strong></div>
+          <div class="bp-field"><small>Passengers</small><strong>${c.pups.length} pup${c.pups.length > 1 ? "s" : ""} · ${dateStr}</strong></div>
+          <div class="mini-stamp ink">Status<b>Pending</b></div>
+          <div class="barcode" style="${barcode}" role="img" aria-label="Barcode for ${id}"></div>
+        </div>
+      </article>
+      <div class="row" style="justify-content:center"><a class="btn" href="pup.html#${c.pups[0].id}">View ${WR.esc(c.pups[0].name)}'s Pup Passport</a><a class="btn ghost" href="book.html">Book another ride</a></div>
+    </div>`;
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 

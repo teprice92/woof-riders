@@ -33,6 +33,8 @@
   --sash-ink: #5b4a22;
   --road: #1d2630;
   --sign: #0d6b3f;            /* highway-sign green */
+  --paper: #fbf5e6;           /* passport paper */
+  --paper-line: rgba(91, 74, 34, .10);
 
   /* Type */
   --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
@@ -57,7 +59,7 @@
     --sun: #ffc548; --sun-soft: #3a2e12; --good: #4cc983; --warn: #e3a94a; --bad: #ff7b66;
     --on-accent: #0a1520; --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
     --glass: rgba(10, 21, 32, .72); --sky-1: #1a1838; --sky-2: #4a2340; --coral: #ff6b70; --sash: #6b5a33; --sash-ink: #f5e6c2;
-    --road: #111820; --sign: #0f7a48; color-scheme: dark;
+    --road: #111820; --sign: #0f7a48; --paper: #1c2530; --paper-line: rgba(255, 255, 255, .05); color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
@@ -66,7 +68,7 @@
   --sun: #ffc548; --sun-soft: #3a2e12; --good: #4cc983; --warn: #e3a94a; --bad: #ff7b66;
   --on-accent: #0a1520; --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
   --glass: rgba(10, 21, 32, .72); --sky-1: #1a1838; --sky-2: #4a2340; --coral: #ff6b70; --sash: #6b5a33; --sash-ink: #f5e6c2;
-  --road: #111820; --sign: #0f7a48; color-scheme: dark;
+  --road: #111820; --sign: #0f7a48; --paper: #1c2530; --paper-line: rgba(255, 255, 255, .05); color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -79,6 +81,7 @@ body {
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--glass); }
 img { max-width: 100%; height: auto; display: block; }
 main { overflow-x: clip; }
+[hidden] { display: none !important; }
 a { color: var(--sea); text-decoration-thickness: .08em; text-underline-offset: .18em; }
 h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.05; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
 h1 { font-family: var(--font-script); font-size: var(--step-4); font-weight: 400; letter-spacing: -.005em; line-height: 1.02; }
@@ -578,6 +581,76 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 
 /* wavy section edge */
 .wave-top { display: block; width: 100%; height: 50px; margin-bottom: -1px; }
+
+/* ---------- passport stamps ---------- */
+.passport { background: var(--paper); border-radius: 22px; padding: clamp(20px, 3vw, 36px); position: relative; overflow: hidden;
+  background-image: linear-gradient(var(--paper-line) 1px, transparent 1px), linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+  background-size: 28px 28px; box-shadow: inset 0 0 0 1px var(--paper-line), 0 20px 40px rgba(16, 40, 61, .10); }
+.passport::before { /* spine */ content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: linear-gradient(var(--paper-line), color-mix(in srgb, var(--sash-ink) 25%, transparent), var(--paper-line)); }
+@media (max-width: 720px) { .passport::before { display: none; } }
+.passport-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; margin-bottom: 22px; position: relative; font: 800 .74rem var(--font-body); letter-spacing: .2em; text-transform: uppercase; color: color-mix(in srgb, var(--sash-ink) 75%, transparent); }
+.stamps { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 26px 18px; position: relative; }
+.ink { /* worn rubber-stamp ink */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -3.2 2.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0/180px 180px;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -3.2 2.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0/180px 180px; }
+.pstamp { --c: var(--sunset); --r: -6deg; color: var(--c); justify-self: center; display: grid; place-items: center; text-align: center; gap: 2px;
+  width: 148px; aspect-ratio: 1; max-width: 100%; padding: 14px; border: 3px solid currentColor; border-radius: 50%;
+  box-shadow: inset 0 0 0 4px var(--paper), inset 0 0 0 6px currentColor; transform: rotate(var(--r)); text-transform: uppercase; line-height: 1.05; }
+.pstamp.rect { border-radius: 14px; aspect-ratio: 1.25; width: 160px; }
+.pstamp.oval { border-radius: 50% / 42%; aspect-ratio: 1.3; width: 166px; }
+.pstamp .top { font: 800 .58rem var(--font-body); letter-spacing: .2em; }
+.pstamp .em { font-size: 1.7rem; line-height: 1.1; filter: grayscale(1) contrast(1.4); opacity: .85; }
+.pstamp .name { font: 400 .98rem var(--font-script); letter-spacing: .01em; text-transform: none; }
+.pstamp .date { font: 800 .7rem var(--font-body); letter-spacing: .14em; font-variant-numeric: tabular-nums; padding: 2px 6px; border-block: 2px solid currentColor; margin-top: 3px; }
+.pstamp.empty { color: color-mix(in srgb, var(--sash-ink) 30%, transparent); border-style: dashed; box-shadow: none; transform: none; -webkit-mask: none; mask: none; }
+.pstamp.empty .em { opacity: .4; }
+.pstamp.thump { animation: thump .55s cubic-bezier(.3, 1.6, .5, 1) both; }
+@keyframes thump { from { transform: scale(2.2) rotate(calc(var(--r) - 12deg)); opacity: 0; } 60% { opacity: 1; } to { transform: rotate(var(--r)); opacity: 1; } }
+/* small stamps used elsewhere */
+.mini-stamp { --c: var(--sunset); position: absolute; color: var(--c); border: 3px solid currentColor; border-radius: 10px; padding: 6px 10px; font: 800 .72rem var(--font-body); letter-spacing: .14em; text-transform: uppercase; line-height: 1.15; text-align: center; transform: rotate(-10deg); box-shadow: inset 0 0 0 2px var(--surface), inset 0 0 0 4px currentColor; background: color-mix(in srgb, var(--surface) 70%, transparent); }
+.mini-stamp b { display: block; font: 400 1.05rem var(--font-script); letter-spacing: 0; text-transform: none; }
+.pup-photo-wrap { position: relative; width: 100%; max-width: 260px; }
+.pup-photo-wrap .mini-stamp { right: -18px; bottom: 6px; --c: var(--sea); }
+.report-note { position: relative; }
+.report-note .mini-stamp { right: 18px; top: -26px; transform: rotate(9deg); --c: var(--good); }
+.welcome-stamp { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.welcome-stamp .pstamp { width: 132px; flex-shrink: 0; }
+
+/* ---------- boarding pass confirmation ---------- */
+.boarding { display: grid; grid-template-columns: minmax(0, 1fr) 230px; max-width: 900px; margin-inline: auto; background: var(--surface); border-radius: 26px; box-shadow: 0 1px 0 var(--line), 0 30px 60px rgba(16, 40, 61, .16); position: relative; animation: print-in .8s cubic-bezier(.2, .9, .3, 1) both; }
+@keyframes print-in { from { transform: translateY(30px) rotate(-1.5deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.bp-main { min-width: 0; display: grid; }
+.bp-head { background: var(--ink); color: var(--bg); border-radius: 26px 0 0 0; padding: 18px 26px; display: flex; align-items: center; gap: 14px; position: relative; overflow: hidden; }
+.bp-head img { width: 54px; }
+.bp-head strong { font: 400 1.5rem var(--font-script); white-space: nowrap; }
+.bp-head span { font: 800 .72rem var(--font-body); letter-spacing: .22em; text-transform: uppercase; opacity: .75; margin-left: auto; margin-right: 96px; position: relative; z-index: 1; white-space: nowrap; }
+.bp-head::after { content: ""; position: absolute; right: -14px; top: 0; bottom: 0; width: 104px; background: repeating-linear-gradient(90deg, #ffc548 0 14px, #f2602f 14px 28px, #0f9c96 28px 42px, transparent 42px 52px); transform: skewX(-20deg); opacity: .9; }
+.bp-route { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 14px; align-items: center; padding: 26px 26px 6px; }
+.bp-route .code { font: 400 clamp(2rem, 1.4rem + 2.4vw, 3rem) var(--font-script); line-height: 1; }
+.bp-route .place { color: var(--muted); font-size: .88rem; font-weight: 600; }
+.bp-route .to { text-align: right; }
+.bp-route .bus { font-size: 1.8rem; display: grid; justify-items: center; color: var(--line); }
+.bp-route .bus::after { content: ""; width: 90px; height: 0; border-top: 3px dashed var(--line); margin-top: 4px; }
+.bp-fields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding: 22px 26px 26px; }
+.bp-field { min-width: 0; }
+.bp-field small { display: block; font: 800 .66rem var(--font-body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.bp-field strong { font-family: var(--font-display); font-size: 1.15rem; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.bp-field.wide { grid-column: span 2; }
+.bp-stub { border-left: 3px dashed var(--line); padding: 24px 22px; display: grid; gap: 12px; align-content: space-between; position: relative; min-width: 0; }
+.bp-stub::before, .bp-stub::after { content: ""; position: absolute; left: -19px; width: 34px; height: 34px; border-radius: 50%; background: var(--bg); }
+.bp-stub::before { top: -17px; } .bp-stub::after { bottom: -17px; }
+.barcode { height: 70px; border-radius: 4px; }
+.bp-stub .mini-stamp { position: relative; justify-self: start; transform: rotate(-8deg); --c: var(--sunset); }
+@media (max-width: 760px) {
+  .boarding { grid-template-columns: minmax(0, 1fr); }
+  .bp-head { border-radius: 26px 26px 0 0; }
+  .bp-head span { display: none; }
+  .bp-route { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .bp-route .bus { display: none; }
+  .bp-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bp-stub { border-left: 0; border-top: 3px dashed var(--line); }
+  .bp-stub::before { top: -19px; left: -17px; } .bp-stub::after { top: -19px; bottom: auto; left: auto; right: -17px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track, .sash-track { animation: none !important; }

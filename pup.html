@@ -20,7 +20,7 @@
     <div class="wrap stack-lg">
       <div id="welcome" hidden></div>
       <div class="pup-hero">
-        <div class="pup-photo" id="pup-photo"></div>
+        <div class="pup-photo-wrap"><div class="pup-photo" id="pup-photo"></div><div class="mini-stamp ink" id="issued"></div></div>
         <div>
           <p class="eyebrow">Pup Passport</p>
           <h1 id="pup-name" style="margin-top:8px">Pup</h1>
@@ -43,6 +43,19 @@
   </section>
 
   <section class="band tight">
+    <div class="wrap stack-lg">
+      <div class="row between" style="align-items:end">
+        <div class="stack" style="gap:8px"><p class="eyebrow">Passport stamps</p><h2 style="font-size:var(--step-2)" id="stamp-head">Stamps</h2></div>
+        <p class="muted" style="max-width:42ch">Every stop stamps the passport on a pup's first visit. Fill the book to become a Legendary Woof Rider.</p>
+      </div>
+      <div class="passport">
+        <div class="passport-head"><span>Woof Riders · Pup Passport</span><span id="passport-no"></span></div>
+        <div class="stamps" id="stamps"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tight" style="padding-top:0">
     <div class="wrap stack-lg">
       <div class="stack" style="gap:8px">
         <p class="eyebrow">Trip journal</p>
