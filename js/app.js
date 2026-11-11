@@ -201,6 +201,20 @@
     });
   }
 
+  // On touch screens a full-width map traps the page scroll. Keep one-finger
+  // swipes for the page until the visitor taps to explore the map.
+  function touchSafeMap(map, el) {
+    if (!window.matchMedia("(pointer: coarse)").matches) return;
+    map.dragging.disable(); map.touchZoom.disable(); map.doubleClickZoom.disable(); if (map.tap) map.tap.disable();
+    const lock = document.createElement("button"); lock.type = "button"; lock.className = "map-lock";
+    lock.innerHTML = "<span>☝️ Tap to explore the map</span>"; lock.setAttribute("aria-label", "Unlock map to pan and zoom");
+    const done = document.createElement("button"); done.type = "button"; done.className = "map-done"; done.textContent = "Done"; done.hidden = true;
+    lock.addEventListener("click", () => { map.dragging.enable(); map.touchZoom.enable(); map.doubleClickZoom.enable(); lock.hidden = true; done.hidden = false; });
+    done.addEventListener("click", () => { map.dragging.disable(); map.touchZoom.disable(); map.doubleClickZoom.disable(); lock.hidden = false; done.hidden = true; });
+    L.DomEvent.disableClickPropagation(done);
+    el.appendChild(lock); el.appendChild(done);
+  }
+
   // ---------- chrome ----------
   function toast(msg) {
     let host = document.querySelector(".toast-host");
@@ -245,6 +259,6 @@
   window.WR = {
     get state() { return state; }, save, reset, toast, esc, uid, money, fmtDate, fmtTime, ageOf, parseDay, hash,
     loc, badge, dog, trip, liveTrip, upcoming, route, progress, visitedStops, dogTrips, reportCard, earnedBadges,
-    gradePaws, gradeClass, waiverStatus, vaccineStatus, seatsLeft, scene, dogPhoto, stopPhoto, medal, readImage
+    gradePaws, gradeClass, waiverStatus, vaccineStatus, seatsLeft, scene, dogPhoto, stopPhoto, medal, readImage, touchSafeMap
   };
 })();

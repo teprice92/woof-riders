@@ -123,6 +123,7 @@
     // Most stops are in the metro; keep the far road trip from shrinking the view unless visited.
     const fit = all.filter((l) => l.id !== "sedona" || places.has("sedona"));
     map.fitBounds(L.latLngBounds(fit.map((l) => [l.lat, l.lng])).pad(0.15));
+    WR.touchSafeMap(map, document.getElementById("map"));
   }
 
   // ---------- facts ----------

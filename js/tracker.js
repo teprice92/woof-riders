@@ -37,6 +37,7 @@
     busMarker = L.marker([locs[0].lat, locs[0].lng], { zIndexOffset: 1000, icon: L.divIcon({ className: "", html: `<div class="bus-marker"><img src="assets/favicon.png" alt="Woof Bus"></div>`, iconSize: [54, 54], iconAnchor: [27, 27] }) }).addTo(map);
     busMarker.bindTooltip("The Woof Bus", { direction: "top", offset: [0, -26] });
     map.fitBounds(L.latLngBounds(locs.map((l) => [l.lat, l.lng])).pad(0.25));
+    WR.touchSafeMap(map, document.getElementById("map"));
   } else {
     document.getElementById("map").innerHTML = `<div class="empty">Map couldn't load. The itinerary below shows where the bus is.</div>`;
   }
