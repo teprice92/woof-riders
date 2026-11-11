@@ -67,7 +67,7 @@ body {
   -webkit-font-smoothing: antialiased; overflow-x: hidden;
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--glass); }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 a { color: var(--sea); text-decoration-thickness: .08em; text-underline-offset: .18em; }
 h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.05; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
 h1 { font-size: var(--step-4); font-weight: 800; }
